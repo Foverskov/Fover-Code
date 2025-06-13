@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
@@ -327,15 +328,28 @@ func runBash(input json.RawMessage) (string, error) {
 		return "", err
 	}
 
-	parts := strings.Fields(runBashInput.Script)
-	fmt.Println("run bash func:", parts)
-	if len(parts) == 0 {
-		return "", fmt.Errorf("Empty command")
-	}
-
-	cmd := exec.Command(parts[0], parts[1:]...)
-
+	checkBashSafety(runBashInput.Script)
+	cmd := exec.Command("bash", "-c", runBashInput.Script)
 	output, err := cmd.CombinedOutput()
 
 	return string(output), err
+}
+func checkBashSafety(command string) (bool, error) {
+	dangerousPatterns := []*regexp.Regexp{
+		// regexp.MustCompile(`rm\s+.*-rf`), // rm -rf
+		regexp.MustCompile(`sudo`),     // sudo commands
+		regexp.MustCompile(`;\s*rm`),   // chained rm
+		regexp.MustCompile(`\|\s*sh`),  // pipe to shell
+		regexp.MustCompile(`wget.*\|`), // wget pipe
+	}
+
+	for _, pattern := range dangerousPatterns {
+		if pattern.MatchString(command) {
+			return false, fmt.Errorf("command dangerous")
+		}
+	}
+	if len(strings.Fields(command)) == 0 {
+		return false, fmt.Errorf("Command empty")
+	}
+	return true, nil
 }

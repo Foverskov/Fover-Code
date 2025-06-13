@@ -1,0 +1,17 @@
+{
+  "name": "hello-wolrd",
+  "version": "1.0.0",
+  "description": "A stylish Hello World Express app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["express", "hello-world"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
