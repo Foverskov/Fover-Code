@@ -5,14 +5,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/anthropics/anthropic-sdk-go"
-	"github.com/invopop/jsonschema"
 	"os"
 	"os/exec"
 	"path"
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	"github.com/anthropics/anthropic-sdk-go"
+	"github.com/invopop/jsonschema"
 )
 
 func main() {
@@ -148,7 +149,7 @@ var ReadFileDefinition = ToolDefinition{
 }
 
 type ReadFileInput struct {
-	Path string `json:"path" jsonschema_description: "The relative path of a file in the working directory."`
+	Path string `json:"path" jsonschema_description:"The relative path of a file in the working directory."`
 }
 
 var ReadFileInputSchema = GenerateSchema[ReadFileInput]()
@@ -315,7 +316,7 @@ var RunBashDefinition = ToolDefinition{
 }
 
 type RunBashInput struct {
-	Script string `json:"script" jsonschema_description: "The command or script to run."`
+	Script string `json:"script" jsonschema_description:"The command or script to run."`
 }
 
 var RunBashInputSchema = GenerateSchema[RunBashInput]()
